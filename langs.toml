@@ -7,7 +7,7 @@ exclude = [".git", ".gitignore"]
 [Rust]
 extensions = ["rs", "rs.in"]
 comments = [
-  "\\/\\/.*\\n", # Line comment.
+  "\\/\\/.*", # Line comment.
   "(?ms)\\/\\*.*?\\*\\/" # Block comment.
 ]
 indicators = ["Cargo.toml", "Cargo.lock"]
@@ -16,7 +16,24 @@ exclude = ["target", "Cargo.lock"]
 [Toml]
 extensions = ["toml"]
 comments = [
-  "\\/\\/.*\\n" # Line comment.
+  "#.*" # Line comment.
+]
+
+[Yaml]
+extensions = ["yaml", "yml"]
+comments = [
+  "#.*" # Line comment.
+]
+
+[Json]
+extensions = ["json"]
+comments = []
+
+[Ron]
+extensions = ["ron"]
+comments = [
+  "\\/\\/.*", # Line comment.
+  "(?ms)\\/\\*.*?\\*\\/" # Block comment.
 ]
 
 [Markdown]
@@ -28,6 +45,29 @@ comments = [
 [Wgsl]
 extensions = ["wgsl"]
 comments = [
-  "\\/\\/.*\\n", # Line comment.
+  "\\/\\/.*", # Line comment.
   "(?ms)\\/\\*.*?\\*\\/" # Block comment.
+]
+
+[Javascript]
+extensions = ["js", "jsx", "cjs", "mjs"]
+comments = [
+  "\\/\\/.*", # Line comment.
+  "(?ms)\\/\\*.*?\\*\\/" # Block comment.
+]
+# TODO: Add more indicators and excludes
+indicators = ["node_modules", "package.json", "package-lock.json", "bun.lockb", "pnpm-lock.yaml"]
+exclude = ["node_modules", "package-lock.json", "bun.lockb", "pnpm-lock.yaml"]
+
+[Typescript]
+extensions = ["ts", "tsx"]
+comments = [
+  "\\/\\/.*", # Line comment.
+  "(?ms)\\/\\*.*?\\*\\/" # Block comment.
+]
+
+[Python]
+extensions = ["py"]
+comments = [
+  "#.*" # Line comment.
 ]
