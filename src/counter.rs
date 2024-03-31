@@ -148,7 +148,13 @@ fn count_lines(path: &Path) -> Result<FileStats, std::io::Error> {
     stats.no_whitespace = content.lines().filter(|line| !line.trim().is_empty()).count();
 
     // Remove all matching comments in the given lang.
-    let lang = crate::langs::EXTENSIONS_MAP.get(path.extension().unwrap().to_str().unwrap());
+    let Some(extension) = path.extension() else {
+        stats.lang = style("No extension").red().to_string();
+        stats.code = stats.no_whitespace;
+        return Ok(stats);
+    };
+
+    let lang = crate::langs::EXTENSIONS_MAP.get(extension.to_str().unwrap());
     if let Some(lang) = lang {
         stats.lang = style(lang.name).green().to_string();
         let no_comments = lang.remove_comments(content.into());
