@@ -1,0 +1,33 @@
+[Git] # This is here just for excludes
+extensions = []
+comments = []
+indicators = [".git"]
+exclude = [".git", ".gitignore"]
+
+[Rust]
+extensions = ["rs", "rs.in"]
+comments = [
+  "\\/\\/.*\\n", # Line comment.
+  "(?ms)\\/\\*.*?\\*\\/" # Block comment.
+]
+indicators = ["Cargo.toml", "Cargo.lock"]
+exclude = ["target", "Cargo.lock"]
+
+[Toml]
+extensions = ["toml"]
+comments = [
+  "\\/\\/.*\\n" # Line comment.
+]
+
+[Markdown]
+extensions = ["md", "mdx", "mdsvex"]
+comments = [
+  "^<!--\\n(.*(?:\\n.*)*?)\\n-->" # HTML comment.
+]
+
+[Wgsl]
+extensions = ["wgsl"]
+comments = [
+  "\\/\\/.*\\n", # Line comment.
+  "(?ms)\\/\\*.*?\\*\\/" # Block comment.
+]
