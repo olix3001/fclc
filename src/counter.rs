@@ -18,7 +18,7 @@ struct SummarizedStats {
 
 impl GlobalStats {
     pub fn to_pretty(&self) -> String {
-        use tabled::{builder::Builder, settings::{Style, Alignment}};
+        use tabled::{builder::Builder, settings::Style};
 
         let mut by_lang: HashMap<String, SummarizedStats> = HashMap::new();
         for result in self.files.values() {
@@ -79,11 +79,11 @@ pub struct FileStats {
     code: usize
 }
 
+#[derive(Clone)]
 pub struct CounterPool {
-    workers: Vec<JoinHandle<()>>,
     tasks: Sender<PathBuf>,
     results: Receiver<FileStats>,
-    waiting: Arc<AtomicUsize>
+    waiting: Arc<AtomicUsize>,
 }
 
 impl CounterPool {
@@ -91,13 +91,12 @@ impl CounterPool {
         let (tasks_send, tasks_recv): (_, Receiver<PathBuf>) = crossbeam::channel::unbounded();
         let (results_send, results_recv) = crossbeam::channel::unbounded();
         let waiting = Arc::new(AtomicUsize::new(0));
-        let mut workers = Vec::new();
 
         for _ in 0..n {
             let tasks = tasks_recv.clone();
             let results = results_send.clone();
             let waiting = Arc::clone(&waiting);
-            let worker = std::thread::spawn(move || {
+            let _ = std::thread::spawn(move || {
                 while let Ok(task) = tasks.recv() {
                     match count_lines(task.as_path()) {
                         Ok(stats) => { let _ = results.send(stats).unwrap(); },
@@ -105,11 +104,9 @@ impl CounterPool {
                     }
                 }
             });
-            workers.push(worker);
         }
 
         Self {
-            workers,
             tasks: tasks_send,
             results: results_recv,
             waiting
